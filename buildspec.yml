@@ -9,7 +9,7 @@ phases:
       - pip install -r requirements.txt
   build:
     commands:
-      - aws cloudformation package --template-file sam.yaml --output-template-file output-sam.yaml --s3-bucket $S3_BUCKET
+      - aws cloudformation package --template-file sam.yaml --output-template-file output-sam.yaml --s3-bucket bucket-codepipeline-artifacts
 artifacts:
   type: zip
   files:
