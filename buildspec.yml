@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+  pre_build:
+    commands:
+      - pip install -r requirements.txt
+  build:
+    commands:
+      - aws cloudformation package --template-file sam.yaml --output-template-file output-sam.yaml --s3-bucket $S3_BUCKET
+artifacts:
+  type: zip
+  files:
+    - output-sam.yaml
