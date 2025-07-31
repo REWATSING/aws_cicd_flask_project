@@ -8,3 +8,11 @@ def hello_world():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
+try:
+    from awslambdaric import lambda_handler
+    from mangum import Mangum
+    handler = Mangum(app)
+    lambda_handler = handler
+except ImportError:
+    pass
+
