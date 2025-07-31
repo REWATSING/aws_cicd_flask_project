@@ -1,15 +1,20 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Transform: 'AWS::Serverless-2016-10-31'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Flask App in Lambda using container image, built via SAM and deployed via CodePipeline.
+
+Globals:
+  Function:
+    Timeout: 30
 
 Resources:
-  HelloWorldFunction:
-    Type: 'AWS::Serverless::Function'
+  FlaskLambdaFunction:
+    Type: AWS::Serverless::Function
     Properties:
-      Handler: app.lambda_handler
-      Runtime: python3.8
-      CodeUri: ./
+      PackageType: Image
+      ImageUri: !Sub ${FlaskLambdaImage}
       Events:
-        HelloWorld:
+        RootEndpoint:
           Type: Api
           Properties:
             Path: /
