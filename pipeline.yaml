@@ -5,7 +5,7 @@ Resources:
   FlaskPipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
-      RoleArn: arn:aws:iam::${AWS::AccountId}:role/FlaskCodePipelineRole
+      RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/FlaskCodePipelineRole
       ArtifactStore:
         Type: S3
         Location: flask-lambda-artifacts-bucket
@@ -23,7 +23,7 @@ Resources:
               Configuration:
                 Owner: REWATSING
                 Repo: aws_cicd_flask_project
-                Branch: main
+                Branch: master
                 OAuthToken: "{{resolve:secretsmanager:GitHubToken:SecretString:token}}"
               RunOrder: 1
 
