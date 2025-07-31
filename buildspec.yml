@@ -3,14 +3,23 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.8
+      docker: 18
   pre_build:
     commands:
-      - pip install -r requirements.txt
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 207567778537.dkr.ecr.ap-south-1.amazonaws.com
   build:
     commands:
-      - aws cloudformation package --template-file sam.yaml --s3-bucket codepipeline-ap-southeast-1-694027751085 --output-template-file output-sam.yaml
+      - echo Building the Docker image...
+      - docker build -t flask-lambda .
+      - docker tag flask-lambda:latest <your-ecr-uri>:latest
+  post_build:
+    commands:
+      - echo Pushing the Docker image...
+      - docker push <your-ecr-uri>:latest
+      - echo Writing image definition...
+      - printf '[{"name":"FlaskLambdaFunction","imageUri":"%s"}]' <your-ecr-uri>:latest > imagedefinitions.json
+
 artifacts:
-  type: zip
   files:
-    - output-sam.yaml
+    - imagedefinitions.json
