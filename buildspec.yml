@@ -12,13 +12,13 @@ phases:
     commands:
       - echo Building the Docker image...
       - docker build -t flask-lambda .
-      - docker tag flask-lambda:latest <your-ecr-uri>:latest
+      - docker tag flask-lambda:latest 207567778537.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-repo:latest
   post_build:
     commands:
       - echo Pushing the Docker image...
-      - docker push <your-ecr-uri>:latest
+      - docker push 207567778537.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-repo:latest
       - echo Writing image definition...
-      - printf '[{"name":"FlaskLambdaFunction","imageUri":"%s"}]' <your-ecr-uri>:latest > imagedefinitions.json
+      - printf '[{"name":"FlaskLambdaFunction","imageUri":"%s"}]' 207567778537.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-repo:latest > imagedefinitions.json
 
 artifacts:
   files:
