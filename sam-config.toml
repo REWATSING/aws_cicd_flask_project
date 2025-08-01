@@ -5,6 +5,7 @@ version = 0.1
 region = "ap-south-1"
 capabilities = "CAPABILITY_IAM"
 stack_name = "FlaskLambdaPipelineStack"
-s3_bucket = "flask-lambda-artifacts-1753952051"
+s3_bucket = "flask-lambda-artifacts-bucket"
 confirm_changeset = false
 resolve_s3 = true
+

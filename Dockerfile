@@ -4,5 +4,7 @@ COPY app.py requirements.txt ./
 
 RUN pip install -r requirements.txt -t .
 
-# Set the CMD to your handler (file.function)
+ENV PYTHONPATH="${PYTHONPATH}:/"
+
 CMD ["app.lambda_handler"]
+

@@ -5,7 +5,7 @@ Resources:
   FlaskPipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
-      RoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/FlaskCodePipelineRole
+      RoleArn: arn:aws:iam::207567778537:role/FlaskCodePipelineRole
       ArtifactStore:
         Type: S3
         Location: flask-lambda-artifacts-bucket
@@ -45,17 +45,15 @@ Resources:
 
         - Name: Deploy
           Actions:
-            - Name: DeployWithSAM
+            - Name: LambdaDeploy
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
-                Provider: CloudFormation
+                Provider: Lambda
                 Version: 1
               InputArtifacts:
                 - Name: BuildArtifact
               Configuration:
-                ActionMode: CREATE_UPDATE
-                StackName: FlaskLambdaStack
-                Capabilities: CAPABILITY_IAM
-                TemplatePath: BuildArtifact::packaged.yaml
+                FunctionName: FlaskLambdaFunction
+                ImageUri: 207567778537.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-repo:latest
               RunOrder: 1

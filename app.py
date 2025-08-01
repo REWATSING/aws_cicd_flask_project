@@ -1,4 +1,5 @@
 from flask import Flask
+from mangum import Mangum
 
 app = Flask(__name__)
 
@@ -6,13 +7,6 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello, AWS CI/CD Pipeline with Python!'
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
-try:
-    from awslambdaric import lambda_handler
-    from mangum import Mangum
-    handler = Mangum(app)
-    lambda_handler = handler
-except ImportError:
-    pass
+# Lambda-compatible handler
+lambda_handler = Mangum(app)
 

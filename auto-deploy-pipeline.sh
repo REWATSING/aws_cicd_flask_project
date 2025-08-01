@@ -8,7 +8,7 @@ STACK_NAME="FlaskLambdaPipelineStack"
 
 echo "[1] Deploying pipeline..."
 sam deploy \
-  --template-file pipeline.yaml \
+  --template-file aws_code_pipeline.yaml \
   --config-env default \
   --region $REGION \
   --stack-name $STACK_NAME \
