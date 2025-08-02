@@ -1,1 +1,41 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+
+# Virtualenv / Python environments
+.env
+.venv
+env/
+venv/
+
+# Editor folders
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# SAM build artifacts
+.aws-sam/
+
+# Git + logs
+*.log
+*.swp
+
+# Node/npm (if ever used)
+node_modules/
+
+# AWS credentials (never push manually!)
+*.pem
+*.key
+*.crt
+
+# Python test cache
+.pytest_cache/
+
+# SAM CLI default config file
+samconfig.toml
 
