@@ -1,10 +1,8 @@
-version = "0.1"
+version = 0.1
 
-[default]
 [default.deploy]
-region = "ap-south-1"
-capabilities = "CAPABILITY_IAM"
 stack_name = "FlaskLambdaPipelineStack"
+region = "ap-south-1"
 s3_bucket = "flask-lambda-artifacts-1753952051"
-confirm_changeset = false
-resolve_s3 = true
+image_repositories = ["FlaskFunction=xxxxxxxxxxxx.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-ecr"]
+capabilities = "CAPABILITY_IAM"

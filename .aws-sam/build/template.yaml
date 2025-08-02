@@ -9,7 +9,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       PackageType: Image
-      FunctionName: flask-lambda-function
+      FunctionName: flask-lambda-function-v2
       ImageUri: 207567778537.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-ecr
       Events:
         Api:
