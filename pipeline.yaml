@@ -1,14 +1,14 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: CI/CD pipeline for Flask Lambda App
+Description: CI/CD pipeline for Flask Lambda
 
 Resources:
   FlaskPipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
-      RoleArn: arn:aws:iam::207567778537:role/FlaskCodePipelineRole
+      RoleArn: arn:aws:iam::207567778537:role/CodePipelineRole
       ArtifactStore:
         Type: S3
-        Location: flask-lambda-artifacts-bucket
+        Location: flask-lambda-artifacts-1753952051
       Stages:
         - Name: Source
           Actions:
@@ -25,11 +25,9 @@ Resources:
                 Repo: aws_cicd_flask_project
                 Branch: master
                 OAuthToken: "{{resolve:secretsmanager:GitHubToken:SecretString:token}}"
-              RunOrder: 1
-
         - Name: Build
           Actions:
-            - Name: CodeBuild
+            - Name: DockerBuild
               ActionTypeId:
                 Category: Build
                 Owner: AWS
@@ -40,20 +38,19 @@ Resources:
               OutputArtifacts:
                 - Name: BuildArtifact
               Configuration:
-                ProjectName: FlaskLambdaBuildProject
-              RunOrder: 1
-
+                ProjectName: flask-lambda-codebuild
         - Name: Deploy
           Actions:
-            - Name: LambdaDeploy
+            - Name: DeployLambda
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
-                Provider: Lambda
+                Provider: CloudFormation
                 Version: 1
               InputArtifacts:
                 - Name: BuildArtifact
               Configuration:
-                FunctionName: FlaskLambdaFunction
-                ImageUri: 207567778537.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-repo:latest
-              RunOrder: 1
+                ActionMode: CREATE_UPDATE
+                StackName: FlaskLambdaPipelineStack
+                Capabilities: CAPABILITY_IAM
+                TemplatePath: SourceArtifact::template.yaml

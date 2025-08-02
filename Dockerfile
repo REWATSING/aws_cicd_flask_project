@@ -1,10 +1,12 @@
-FROM public.ecr.aws/lambda/python:3.8
+FROM public.ecr.aws/lambda/python:3.11
 
-COPY app.py requirements.txt ./
+# Install dependencies
+COPY requirements.txt .
+RUN pip3 install -r requirements.txt -t .
 
-RUN pip install -r requirements.txt -t .
+# Copy source
+COPY app.py .
 
-ENV PYTHONPATH="${PYTHONPATH}:/"
-
-CMD ["app.lambda_handler"]
+# Set handler
+CMD ["app.handler"]
 

@@ -1,26 +1,24 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      docker: 18
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 207567778537.dkr.ecr.ap-south-1.amazonaws.com
+      - echo Logging into Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 207567778537.dkr.ecr.ap-south-1.amazonaws.com)
+      - REPO_URI=<ACCOUNT_ID>.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-ecr
+      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
   build:
     commands:
       - echo Building the Docker image...
-      - docker build -t flask-lambda .
-      - docker tag flask-lambda:latest 207567778537.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-repo:latest
+      - docker build -t $REPO_URI:$IMAGE_TAG .
+      - docker tag $REPO_URI:$IMAGE_TAG $REPO_URI:latest
   post_build:
     commands:
-      - echo Pushing the Docker image...
-      - docker push 207567778537.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-repo:latest
-
-      - echo Updating Lambda function with new image...
-      - aws lambda update-function-code \
-          --function-name FlaskLambdaFunction \
-          --image-uri 207567778537.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-repo:latest \
-          --region $AWS_DEFAULT_REGION
-
+      - echo Pushing Docker image to ECR...
+      - docker push $REPO_URI:$IMAGE_TAG
+      - docker push $REPO_URI:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"FlaskFunction","imageUri":"%s"}]' $REPO_URI:$IMAGE_TAG > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json

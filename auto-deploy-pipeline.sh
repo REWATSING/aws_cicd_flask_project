@@ -1,17 +1,16 @@
 #!/bin/bash
+
 set -e
 
-# Update these
-BUCKET_NAME="flask-lambda-artifacts-bucket"
-REGION="ap-south-1"
 STACK_NAME="FlaskLambdaPipelineStack"
+REGION="ap-south-1"
 
-echo "[1] Deploying pipeline..."
-sam deploy \
-  --template-file aws_code_pipeline.yaml \
-  --config-env default \
-  --region $REGION \
-  --stack-name $STACK_NAME \
-  --s3-bucket $BUCKET_NAME
+echo "Deploying with following values"
+echo "==============================="
+echo "Stack name                   : $STACK_NAME"
+echo "Region                       : $REGION"
+echo ""
 
-echo "[✓] Pipeline deployed."
+sam build
+sam deploy --stack-name $STACK_NAME --region $REGION --capabilities CAPABILITY_IAM --resolve-s3
+

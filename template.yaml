@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Flask Lambda container deployment
+
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+  FlaskFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      FunctionName: flask-lambda-function
+      ImageUri: 207567778537.dkr.ecr.ap-south-1.amazonaws.com/flask-lambda-ecr
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /
+            Method: GET
+

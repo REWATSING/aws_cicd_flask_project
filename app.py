@@ -1,12 +1,11 @@
-from flask import Flask
+from flask import Flask, jsonify
 from mangum import Mangum
 
 app = Flask(__name__)
 
-@app.route('/')
-def hello_world():
-    return 'Hello, AWS CI/CD Pipeline with Python!'
+@app.route("/")
+def index():
+    return jsonify({"message": "Hello from Flask Lambda!"})
 
-# Lambda-compatible handler
-lambda_handler = Mangum(app)
+handler = Mangum(app)
 
